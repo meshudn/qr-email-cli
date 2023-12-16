@@ -12,7 +12,7 @@ import (
 )
 
 func SendEmail(to string, subject string) {
-	from := "meshu.uiu@gmail.com"
+	from := "test@example.com"
 	password := "your-email-password"
 
 	// SMTP server address and port
@@ -46,7 +46,7 @@ func SendEmail(to string, subject string) {
 	headers := textproto.MIMEHeader{}
 	headers.Set("From", from)
 	headers.Set("To", to)
-	headers.Set("Subject", "Email with PNG attachment in message body")
+	headers.Set("Subject", subject)
 
 	// Create a multipart/related message
 	multipartWriter := multipart.NewWriter(msg)
@@ -64,7 +64,7 @@ func SendEmail(to string, subject string) {
 	fmt.Fprint(msg, "\r\n")
 
 	// Add the HTML body with the inline image
-	htmlBody := `<html><body><p>This is the body of the email with an inline PNG image:<br><img src="qr.png"></p></body></html>`
+	htmlBody := `<html><body><p>This is the body of the email with an inline QR image. Please scan this QR! :<br><img src="qr.png"></p></body></html>`
 	fmt.Fprintf(msg, "--%s\r\n", multipartWriter.Boundary())
 	fmt.Fprintf(msg, "Content-Type: text/html; charset=utf-8\r\n")
 	fmt.Fprintf(msg, "\r\n%s\r\n", htmlBody)
@@ -74,8 +74,8 @@ func SendEmail(to string, subject string) {
 	fmt.Fprintf(msg, "\r\n--%s\r\n", multipartWriter.Boundary())
 	fmt.Fprintf(msg, "Content-Type: image/png\r\n")
 	fmt.Fprintf(msg, "Content-Transfer-Encoding: base64\r\n")
-	fmt.Fprintf(msg, "Content-Disposition: inline; filename=\"logo.png\"\r\n")
-	fmt.Fprintf(msg, "Content-ID: <logo.png>\r\n")
+	fmt.Fprintf(msg, "Content-Disposition: inline; filename=\"qr.png\"\r\n")
+	fmt.Fprintf(msg, "Content-ID: <qr.png>\r\n")
 	fmt.Fprintf(msg, "\r\n%s\r\n", encodedAttachment)
 
 	// Connect to the SMTP server
@@ -83,8 +83,6 @@ func SendEmail(to string, subject string) {
 	err = smtp.SendMail(smtpServer+":"+smtpPort, auth, from, []string{to}, msg.Bytes())
 	if err != nil {
 		log.Fatal("Error sending email:", err)
-	} else {
-		log.Fatal(err)
 	}
 
 	fmt.Println("Email sent successfully!")

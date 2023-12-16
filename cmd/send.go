@@ -5,9 +5,7 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/mdp/qrterminal/v3"
 	"github.com/skip2/go-qrcode"
 	"github.com/spf13/cobra"
 )
@@ -28,9 +26,9 @@ var sendCmd = &cobra.Command{
 
 		err := qrcode.WriteFile(body, qrcode.Medium, 256, "qr.png")
 		if err != nil {
-			SendEmail(to, subject)
 		}
-		qrterminal.Generate(body, qrterminal.L, os.Stdout)
+		SendEmail(to, subject)
+		//qrterminal.Generate(body, qrterminal.L, os.Stdout)
 	},
 }
 
