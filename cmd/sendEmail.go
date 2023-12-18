@@ -53,7 +53,7 @@ func SendEmail(to string, subject string) {
 	defer multipartWriter.Close()
 
 	// Set the Content-Type header for the multipart message
-	headers.Set("Content-Type", fmt.Sprintf("multipart/related; boundary=%s", multipartWriter.Boundary()))
+	headers.Set("Content-Type", fmt.Sprintf("multipart/mixed; boundary=%s", multipartWriter.Boundary()))
 
 	// Write the headers to the message
 	for key, values := range headers {
@@ -63,20 +63,13 @@ func SendEmail(to string, subject string) {
 	}
 	fmt.Fprint(msg, "\r\n")
 
-	// Add the HTML body with the inline image
-	htmlBody := `<html><body><p>This is the body of the email with an inline QR image. Please scan this QR! :<br><img src="qr.png"></p></body></html>`
+	encodedImage := base64.StdEncoding.EncodeToString(pngContent)
+
+	// Add the HTML body with the embedded image
+	htmlBody := `<html><body><p>This is the body of the email with an embedded image:<br><img src="data:image/png;base64,` + encodedImage + `"></p></body></html>`
 	fmt.Fprintf(msg, "--%s\r\n", multipartWriter.Boundary())
 	fmt.Fprintf(msg, "Content-Type: text/html; charset=utf-8\r\n")
 	fmt.Fprintf(msg, "\r\n%s\r\n", htmlBody)
-
-	// Add the PNG attachment
-	encodedAttachment := base64.StdEncoding.EncodeToString(pngContent)
-	fmt.Fprintf(msg, "\r\n--%s\r\n", multipartWriter.Boundary())
-	fmt.Fprintf(msg, "Content-Type: image/png\r\n")
-	fmt.Fprintf(msg, "Content-Transfer-Encoding: base64\r\n")
-	fmt.Fprintf(msg, "Content-Disposition: inline; filename=\"qr.png\"\r\n")
-	fmt.Fprintf(msg, "Content-ID: <qr.png>\r\n")
-	fmt.Fprintf(msg, "\r\n%s\r\n", encodedAttachment)
 
 	// Connect to the SMTP server
 	auth := smtp.PlainAuth("", from, password, smtpServer)
