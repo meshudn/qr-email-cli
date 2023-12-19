@@ -35,7 +35,6 @@ var sendCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(sendCmd)
 
-	// Here you can define flags and configuration settings.
 	// Cobra supports persistent flags and local flags.
 	sendCmd.Flags().StringVarP(&to, "to", "t", "", "Recipient's email address (required)")
 	sendCmd.Flags().StringVarP(&subject, "subject", "s", "", "Email subject (required)")
