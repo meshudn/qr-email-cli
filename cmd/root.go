@@ -9,16 +9,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "qremail",
 	Short: "Send QR emails to your friends and family.",
 	Long: `Convert your email into a QR code and send it to your friends and family.:
 
 	Example: qremail send --to="bob@example.com" --subject="Hello" --body="Hello, Bob!"`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
