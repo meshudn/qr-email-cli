@@ -5,3 +5,6 @@ You can send an email with the QR code to your friends, and they can scan the QR
 Fun way to share your message with your friends!
 
 It will ask for your message, email subject, and email address to send the email. Also your name at the end.
+
+Example Screenshot:
+![screenshot](commandline.png)
